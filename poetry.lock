@@ -463,7 +463,7 @@ optional = true
 python-versions = ">=3.6,<4.0"
 
 [package.dependencies]
-Jinja2 = ">=2.11.1,<4.0"
+Jinja2 = "3.1.1"
 Markdown = ">=3.3,<4.0"
 MarkupSafe = ">=1.1,<3.0"
 mkdocs = ">=1.1.1,<2.0.0"
