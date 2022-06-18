@@ -51,7 +51,7 @@ plugins:
       lang: en
   - mkdocstrings:
       watch:
-        - document-tools
+        - document_tools
 extra:
   social:
     - icon: fontawesome/brands/twitter
