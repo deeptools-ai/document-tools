@@ -13,29 +13,37 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
+
 from document_tools.documents.base import Document
 
 
-def test_document_base_class():
+@pytest.fixture
+def file_name():
+    return "test.txt"
+
+
+def test_document_base_class(file_name):
     """
     Test the base class for all documents.
     """
-    document = Document("test.txt")
-    assert document.file == "test.txt"
-    assert document.extension == "txt"
+    document = Document(file_name)
+    assert document.file == file_name
+    assert document.extension == file_name.split(".")[-1]
 
 
-def test_document_repr():
+def test_document_repr(file_name):
     """
     Test the representation of a document.
     """
-    document = Document("test.txt")
-    assert repr(document) == "Document(file='test.txt')"
+    document = Document(file_name)
+    assert repr(document) == f"Document(file='{file_name}')"
 
 
-def test_document_str():
+def test_document_eq(file_name):
     """
-    Test the string representation of a document.
+    Test the equality of two documents.
     """
-    document = Document("test.txt")
-    assert str(document) == "test.txt"
+    document1 = Document(file_name)
+    document2 = Document(file_name)
+    assert document1 == document2
