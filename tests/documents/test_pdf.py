@@ -18,67 +18,48 @@ from typing import List
 
 import pytest
 
-from document_tools.documents.base import Document
+from document_tools.documents.base import PDFDocument
 
 
 @pytest.fixture
 def correct_paths():
-    return [
-        "my_image.ai",
-        "my_image.bmp",
-        "my_image.eps",
-        "my_image.gif",
-        "my_image.jpg",
-        "my_image.jpeg",
-        "my_image.pdf",
-        "my_image.png",
-        "my_image.psd",
-        "my_image.raw",
-        "my_image.svg",
-        "my_image.tif",
-        "my_image.tiff",
-        "my_image.webp",
-        "my_favorite_file.pdf",
-        "my.other.file.pdf",
-        "/home/user/file.jpeg",
-        "home/username/file.tiff",
-    ]
+    return ["file.pdf", "my_favorite_file.pdf", "my.other.file.pdf", "/home/user/file.pdf", "home/username/file.pdf"]
 
 
 @pytest.fixture
 def incorrect_paths():
-    return ["file.txt", "/home/user/file.txt", "Desktop/document.sgi", "user.document.pcx"]
+    return ["file1.txt", "/home/user/file.txt", "Desktop/document.sgi", "user.document.pcx"]
 
 
-def test_document_base_class(correct_paths: List[str], incorrect_paths: List[str]):
+def test_pdf_document_class(correct_paths: List[str], incorrect_paths: List[str]):
     """
-    Test the base class for all documents.
+    Test the PDFDocument class.
     """
     for path in correct_paths:
-        document = Document(path)
+        document = PDFDocument(path)
         assert document._path == Path(path)
         assert document.file == path.split("/")[-1]
         assert document.extension == path.split(".")[-1]
 
     for path in incorrect_paths:
         with pytest.raises(ValueError):
-            Document(path)
+            PDFDocument(path)
 
 
-def test_document_repr(correct_paths: List[str]):
+def test_pdf_document_repr(correct_paths: List[str]):
     """
-    Test the representation of a document.
+    Test the PDFDocument class repr.
     """
     for path in correct_paths:
-        document = Document(path)
-        assert repr(document) == f"Document(file='{path.split('/')[-1]}', extension='{path.split('.')[-1]}')"
+        document = PDFDocument(path)
+        assert repr(document) == f"PDFDocument(file='{path.split('/')[-1]}', extension='{path.split('.')[-1]}')"
 
 
-def test_document_eq(correct_paths: List[str]):
+def test_pdf_document_eq(correct_paths: List[str]):
     """
     Test the equality of two documents.
     """
     for path in correct_paths:
-        document1 = Document(path)
-        document2 = Document(path)
+        document1 = PDFDocument(path)
+        document2 = PDFDocument(path)
         assert document1 == document2

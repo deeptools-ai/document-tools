@@ -21,22 +21,8 @@ from typing import Union
 logger = logging.getLogger(__name__)
 
 
-DOCUMENT_EXTENSIONS = [
-    "ai",
-    "bmp",
-    "eps",
-    "gif",
-    "jpg",
-    "jpeg",
-    "pdf",
-    "png",
-    "psd",
-    "raw",
-    "svg",
-    "tif",
-    "tiff",
-    "webp",
-]
+IMAGE_EXTENSIONS = ["ai", "bmp", "eps", "gif", "jpg", "jpeg", "png", "psd", "raw", "svg", "tif", "tiff", "webp"]
+DOCUMENT_EXTENSIONS = IMAGE_EXTENSIONS[:] + ["pdf"]
 
 
 @dataclass
@@ -97,6 +83,10 @@ class ImageDocument(Document):
 
     def __post_init__(self):
         super().__post_init__()
+        if self.extension not in IMAGE_EXTENSIONS:
+            raise ValueError(
+                f"{self.extension} is not a valid image extension. Valid extensions are: {', '.join(IMAGE_EXTENSIONS)}"
+            )
 
 
 @dataclass
@@ -107,3 +97,5 @@ class PDFDocument(Document):
 
     def __post_init__(self):
         super().__post_init__()
+        if self.extension != "pdf":
+            raise ValueError(f"{self.extension} is not a valid pdf extension. Valid extension is: pdf")

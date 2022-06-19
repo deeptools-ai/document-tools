@@ -18,7 +18,7 @@ from typing import List
 
 import pytest
 
-from document_tools.documents.base import Document
+from document_tools.documents.base import ImageDocument
 
 
 @pytest.fixture
@@ -30,7 +30,6 @@ def correct_paths():
         "my_image.gif",
         "my_image.jpg",
         "my_image.jpeg",
-        "my_image.pdf",
         "my_image.png",
         "my_image.psd",
         "my_image.raw",
@@ -38,8 +37,7 @@ def correct_paths():
         "my_image.tif",
         "my_image.tiff",
         "my_image.webp",
-        "my_favorite_file.pdf",
-        "my.other.file.pdf",
+        "my.other.file.jpeg",
         "/home/user/file.jpeg",
         "home/username/file.tiff",
     ]
@@ -47,38 +45,38 @@ def correct_paths():
 
 @pytest.fixture
 def incorrect_paths():
-    return ["file.txt", "/home/user/file.txt", "Desktop/document.sgi", "user.document.pcx"]
+    return ["file.txt", "/home/user/file.txt", "Desktop/document.sgi", "user.document.pcx", "my_file.pdf"]
 
 
-def test_document_base_class(correct_paths: List[str], incorrect_paths: List[str]):
+def test_image_document_base_class(correct_paths: List[str], incorrect_paths: List[str]):
     """
     Test the base class for all documents.
     """
     for path in correct_paths:
-        document = Document(path)
+        document = ImageDocument(path)
         assert document._path == Path(path)
         assert document.file == path.split("/")[-1]
         assert document.extension == path.split(".")[-1]
 
     for path in incorrect_paths:
         with pytest.raises(ValueError):
-            Document(path)
+            ImageDocument(path)
 
 
-def test_document_repr(correct_paths: List[str]):
+def test_image_document_repr(correct_paths: List[str]):
     """
     Test the representation of a document.
     """
     for path in correct_paths:
-        document = Document(path)
-        assert repr(document) == f"Document(file='{path.split('/')[-1]}', extension='{path.split('.')[-1]}')"
+        document = ImageDocument(path)
+        assert repr(document) == f"ImageDocument(file='{path.split('/')[-1]}', extension='{path.split('.')[-1]}')"
 
 
-def test_document_eq(correct_paths: List[str]):
+def test_image_document_eq(correct_paths: List[str]):
     """
     Test the equality of two documents.
     """
     for path in correct_paths:
-        document1 = Document(path)
-        document2 = Document(path)
+        document1 = ImageDocument(path)
+        document2 = ImageDocument(path)
         assert document1 == document2
