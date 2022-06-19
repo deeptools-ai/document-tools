@@ -26,6 +26,7 @@ IMAGE_EXTENSIONS = ["ai", "bmp", "eps", "gif", "jpg", "jpeg", "png", "psd", "raw
 DOCUMENT_EXTENSIONS = IMAGE_EXTENSIONS[:] + ["pdf"]
 
 
+@dataclass
 class BaseDocument:
     """
     Base class for all documents.
@@ -71,6 +72,12 @@ class BaseDocument:
             raise ValueError(
                 f"{self.extension} is not a valid extension. Valid extensions are: {', '.join(DOCUMENT_EXTENSIONS)}"
             )
+
+    def to_dict(self):
+        """Convert the document to a dictionary."""
+        tmp_dict = self.__dict__.copy()
+        tmp_dict.pop("_path")
+        return tmp_dict
 
     def load(self):
         """Load the document."""

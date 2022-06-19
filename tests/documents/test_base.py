@@ -102,6 +102,13 @@ def test_document_eq(correct_paths: List[str]):
         assert document1 == document2
 
 
+def test_to_dict_method(correct_paths: List[str]):
+    """Test the to_dict method of a document."""
+    for path in correct_paths:
+        document = BaseDocument(path)
+        assert document.to_dict() == {"file": path.split("/")[-1], "extension": path.split(".")[-1]}
+
+
 def test_load_method():
     """Test the load method of a document."""
     with pytest.raises(NotImplementedError):
