@@ -18,7 +18,7 @@ from typing import List
 
 import pytest
 
-from document_tools.documents.base import PDFDocument
+from document_tools.documents import PDFDocument
 
 
 @pytest.fixture

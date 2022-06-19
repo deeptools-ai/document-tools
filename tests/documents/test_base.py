@@ -18,7 +18,7 @@ from typing import Any, List
 
 import pytest
 
-from document_tools.documents.base import Document
+from document_tools.documents import BaseDocument
 
 
 @pytest.fixture
@@ -60,44 +60,62 @@ def incorrect_objects():
         [],
         (),
         {},
-        Document("/home/user/file.png"),
-        Document("/home/user/file.pdf"),
+        BaseDocument("/home/user/file.png"),
+        BaseDocument("/home/user/file.pdf"),
     ]
 
 
+@pytest.fixture
+def tokenizer():
+    return ["layoutlm", "layoutlmv2", "layoutlmv3", "layoutxlm"]
+
+
 def test_document_base_class(correct_paths: List[str], incorrect_paths: List[str], incorrect_objects: List[Any]):
-    """
-    Test the base class for all documents.
-    """
+    """Test the base class for all documents."""
     for path in correct_paths:
-        document = Document(path)
+        document = BaseDocument(path)
         assert document._path == Path(path)
         assert document.file == path.split("/")[-1]
         assert document.extension == path.split(".")[-1]
 
     for path in incorrect_paths:
         with pytest.raises(ValueError):
-            Document(path)
+            BaseDocument(path)
 
     for item in incorrect_objects:
         with pytest.raises(TypeError):
-            Document(item)
+            BaseDocument(item)
 
 
 def test_document_repr(correct_paths: List[str]):
-    """
-    Test the representation of a document.
-    """
+    """Test the representation of a document."""
     for path in correct_paths:
-        document = Document(path)
-        assert repr(document) == f"Document(file='{path.split('/')[-1]}', extension='{path.split('.')[-1]}')"
+        document = BaseDocument(path)
+        assert repr(document) == f"BaseDocument(file='{path.split('/')[-1]}', extension='{path.split('.')[-1]}')"
 
 
 def test_document_eq(correct_paths: List[str]):
-    """
-    Test the equality of two documents.
-    """
+    """Test the equality of two documents."""
     for path in correct_paths:
-        document1 = Document(path)
-        document2 = Document(path)
+        document1 = BaseDocument(path)
+        document2 = BaseDocument(path)
         assert document1 == document2
+
+
+def test_load_method():
+    """Test the load method of a document."""
+    with pytest.raises(NotImplementedError):
+        BaseDocument("/home/user/file.png").load()
+
+
+def test_tokenize_method(tokenizer: List[str]):
+    """Test the tokenize method of a document."""
+    for tokenizer_name in tokenizer:
+        with pytest.raises(NotImplementedError):
+            BaseDocument("/home/user/file.png").tokenize(tokenizer_name)
+
+
+def test_save_method():
+    """Test the save method of a document."""
+    with pytest.raises(NotImplementedError):
+        BaseDocument("/home/user/file.png").save()

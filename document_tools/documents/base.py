@@ -26,8 +26,7 @@ IMAGE_EXTENSIONS = ["ai", "bmp", "eps", "gif", "jpg", "jpeg", "png", "psd", "raw
 DOCUMENT_EXTENSIONS = IMAGE_EXTENSIONS[:] + ["pdf"]
 
 
-@dataclass
-class Document:
+class BaseDocument:
     """
     Base class for all documents.
 
@@ -73,9 +72,21 @@ class Document:
                 f"{self.extension} is not a valid extension. Valid extensions are: {', '.join(DOCUMENT_EXTENSIONS)}"
             )
 
+    def load(self):
+        """Load the document."""
+        raise NotImplementedError()
+
+    def tokenize(self, tokenizer: str):
+        """Tokenize the document."""
+        raise NotImplementedError()
+
+    def save(self):
+        """Save the document."""
+        raise NotImplementedError()
+
 
 @dataclass
-class ImageDocument(Document):
+class ImageDocument(BaseDocument):
     """Class for image documents."""
 
     def __post_init__(self):
@@ -88,7 +99,7 @@ class ImageDocument(Document):
 
 
 @dataclass
-class PDFDocument(Document):
+class PDFDocument(BaseDocument):
     """Class for pdf documents."""
 
     def __post_init__(self):
