@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pathlib import Path
-from typing import List
+from typing import Any, List
 
 import pytest
 
@@ -47,10 +47,25 @@ def correct_paths():
 
 @pytest.fixture
 def incorrect_paths():
-    return ["file.txt", "/home/user/file.txt", "Desktop/document.sgi", "user.document.pcx"]
+    return ["", "file.txt", "/home/user/file.txt", "Desktop/document.sgi", "user.document.pcx"]
 
 
-def test_document_base_class(correct_paths: List[str], incorrect_paths: List[str]):
+@pytest.fixture
+def incorrect_objects():
+    return [
+        1,
+        True,
+        False,
+        None,
+        [],
+        (),
+        {},
+        Document("/home/user/file.png"),
+        Document("/home/user/file.pdf"),
+    ]
+
+
+def test_document_base_class(correct_paths: List[str], incorrect_paths: List[str], incorrect_objects: List[Any]):
     """
     Test the base class for all documents.
     """
@@ -63,6 +78,10 @@ def test_document_base_class(correct_paths: List[str], incorrect_paths: List[str
     for path in incorrect_paths:
         with pytest.raises(ValueError):
             Document(path)
+
+    for item in incorrect_objects:
+        with pytest.raises(TypeError):
+            Document(item)
 
 
 def test_document_repr(correct_paths: List[str]):

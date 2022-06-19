@@ -56,8 +56,14 @@ class Document:
 
     def __post_init__(self):
         """Post-initialization."""
+        if not isinstance(self._path, Path) and not isinstance(self._path, str):
+            raise TypeError(f"The path must be a string or a Path object, not {type(self._path)}")
+
         if isinstance(self._path, str):
-            self._path = Path(self._path)
+            if self._path != "":
+                self._path = Path(self._path)
+            else:
+                raise ValueError("You passed an empty string as path, which is not allowed.")
 
         self.file = self._path.name
 
