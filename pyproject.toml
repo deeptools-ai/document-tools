@@ -3,7 +3,7 @@
 name = "document-tools"
 version = "0.0.1"
 homepage = "https://github.com/deeptools-ai/document-tools"
-description = "🔧 Tools to automate your document understanding tasks.."
+description = "🔧 Tools to automate your document understanding tasks."
 authors = ["deeptools.ai <contact@deeptools.ai>"]
 readme = "README.md"
 license =  "Apache-2.0"
