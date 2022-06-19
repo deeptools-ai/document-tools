@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""base.py contains the base class for all documents, including the base class for all document types."""
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -47,15 +48,6 @@ class Document:
     ValueError
         If the extension of the document is not valid. Valid extensions are ai, bmp, eps, gif, jpg, jpeg, pdf, png, psd,
         raw, svg, tif, tiff and webp.
-
-    Examples
-    --------
-    >>> from document_tools.documents.base import Document
-    >>> document = Document("my_image.jpg")
-    >>> document.file
-    'my_image.jpg'
-    >>> document.extension
-    'jpg'
     """
 
     _path: Union[str, Path] = field(repr=False)
@@ -63,6 +55,7 @@ class Document:
     extension: str = field(init=False)
 
     def __post_init__(self):
+        """Post-initialization."""
         if isinstance(self._path, str):
             self._path = Path(self._path)
 
@@ -77,11 +70,10 @@ class Document:
 
 @dataclass
 class ImageDocument(Document):
-    """
-    Class for image documents.
-    """
+    """Class for image documents."""
 
     def __post_init__(self):
+        """Post-init method for ImageDocument."""
         super().__post_init__()
         if self.extension not in IMAGE_EXTENSIONS:
             raise ValueError(
@@ -91,11 +83,10 @@ class ImageDocument(Document):
 
 @dataclass
 class PDFDocument(Document):
-    """
-    Class for pdf documents.
-    """
+    """Class for pdf documents."""
 
     def __post_init__(self):
+        """Post-init method for PDFDocument."""
         super().__post_init__()
         if self.extension != "pdf":
             raise ValueError(f"{self.extension} is not a valid pdf extension. Valid extension is: pdf")
