@@ -19,31 +19,34 @@ from document_tools.documents.base import Document
 
 
 @pytest.fixture
-def file_name():
-    return "test.txt"
+def file_names():
+    return ["file1.txt", "file2.txt", "my_image.png", "my_favorite_file.pdf", "my.other.file.pdf"]
 
 
-def test_document_base_class(file_name):
+def test_document_base_class(file_names):
     """
     Test the base class for all documents.
     """
-    document = Document(file_name)
-    assert document.file == file_name
-    assert document.extension == file_name.split(".")[-1]
+    for file_name in file_names:
+        document = Document(file_name)
+        assert document.file == file_name
+        assert document.extension == file_name.split(".")[-1]
 
 
-def test_document_repr(file_name):
+def test_document_repr(file_names):
     """
     Test the representation of a document.
     """
-    document = Document(file_name)
-    assert repr(document) == f"Document(file='{file_name}')"
+    for file_name in file_names:
+        document = Document(file_name)
+        assert repr(document) == f"Document(file='{file_name}')"
 
 
-def test_document_eq(file_name):
+def test_document_eq(file_names):
     """
     Test the equality of two documents.
     """
-    document1 = Document(file_name)
-    document2 = Document(file_name)
-    assert document1 == document2
+    for file_name in file_names:
+        document1 = Document(file_name)
+        document2 = Document(file_name)
+        assert document1 == document2
