@@ -13,19 +13,3 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""encode_functions.py defines all encoding functions used to tokenize a dataset."""
-
-
-def encode_layoutlmv2():
-    """"""
-    pass
-
-
-def encode_layoutlmv3():
-    """"""
-    pass
-
-
-def encode_layoutxlm():
-    """"""
-    pass

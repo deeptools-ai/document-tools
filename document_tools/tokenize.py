@@ -18,18 +18,13 @@ import logging
 from typing import Optional, Union
 
 from datasets import Array2D, Array3D, ClassLabel, Dataset, DatasetDict, Features, Sequence, Value
-from transformers import LayoutLMTokenizer, LayoutLMv2Processor, LayoutLMv3Processor, LayoutXLMProcessor
+from transformers import LayoutLMv2Processor, LayoutLMv3Processor, LayoutXLMProcessor
 
-from .encode_functions import encode_layoutlm, encode_layoutlmv2, encode_layoutlmv3, encode_layoutxlm
+from .encode_functions import encode_layoutlmv2, encode_layoutlmv3, encode_layoutxlm
 
 logger = logging.getLogger(__name__)
 
 TARGET_MODELS = {
-    "layoutlm": {
-        "preprocessor": LayoutLMTokenizer,
-        "default_model": "microsoft/layoutlm-base-uncased",
-        "encode_function": encode_layoutlm(),
-    },
     "layoutlmv2": {
         "preprocessor": LayoutLMv2Processor,
         "default_model": "microsoft/layoutlmv2-base-uncased",
@@ -48,11 +43,21 @@ TARGET_MODELS = {
         "preprocessor": LayoutLMv3Processor,
         "default_model": "microsoft/layoutlmv3-base-uncased",
         "encode_function": encode_layoutlmv3(),
+        "features": Features(
+            {
+                'image': Array3D(dtype="int64", shape=(3, 224, 224)),
+                'input_ids': Sequence(feature=Value(dtype='int64')),
+                'attention_mask': Sequence(Value(dtype='int64')),
+                'token_type_ids': Sequence(Value(dtype='int64')),
+                'bbox': Array2D(dtype="int64", shape=(512, 4)),
+            }
+        ),
     },
     "layoutxlm": {
         "preprocessor": LayoutXLMProcessor,
         "default_model": "microsoft/layoutxlm-base-uncased",
         "encode_function": encode_layoutxlm(),
+        "features": Features({}),
     },
 }
 
@@ -72,6 +77,20 @@ def tokenize_dataset(
     save_path: Optional[str] = None,
 ) -> Union[Dataset, DatasetDict]:
     """"""
+    if not target_model:
+        raise ValueError("""You need to specify the target architecture you want to use to tokenize your dataset.""")
+    else:
+        try:
+            target_model_config = TARGET_MODELS[target_model]  # type: ignore
+        except KeyError:
+            raise KeyError(
+                f"""
+                You specified a `target_model` that is not supported. Available models: {TARGET_MODELS.keys()}
+                If you think that new model should be available, please feel free to open a new issue on the project
+                repository: https://github.com/deeptools-ai/document-tools/issues
+            """
+            )
+
     if save_to_disk and save_path is None:
         raise ValueError(
             """
@@ -101,8 +120,8 @@ def tokenize_dataset(
         dataset_is_dict = True
         dict_keys = list(dataset.keys())
         labels = dataset[dict_keys[0]].features[label_colum].names
-
-    target_model_config = TARGET_MODELS[target_model]  # type: ignore
+    else:
+        raise TypeError("")
 
     features = target_model_config["features"]
     features["labels"] = ClassLabel(num_classes=len(labels), names=labels)
@@ -135,6 +154,9 @@ def tokenize_dataset(
         )
 
     if save_to_disk:
-        encoded_dataset.save(save_path)
+        try:
+            encoded_dataset.save(save_path)
+        except Exception as e:
+            logger.error(e)
 
     return encoded_dataset
