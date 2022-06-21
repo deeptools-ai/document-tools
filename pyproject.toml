@@ -25,6 +25,7 @@ packages = [
 [tool.poetry.dependencies]
 python = ">=3.7,<4.0"
 datasets = "^2.3.2"
+Pillow = "^9.1.1"
 transformers = "^4.20.0"
 
 black = { version = "22.3.0", optional = true}
