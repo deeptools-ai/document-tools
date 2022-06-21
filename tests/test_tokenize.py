@@ -13,6 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import logging
 from typing import Any, List
 
 import numpy as np
@@ -58,6 +59,10 @@ def test_incorrect_dataset_format(incorrect_dataset_format: List[Any], correct_m
 def test_correct_dataset_format(dataset_for_testing: DatasetDict, correct_models: List[str]):
     """"""
     tokenize_dataset(dataset_for_testing, target_model=correct_models[0])
+
+
+def test_correct_dataset_dict_format(dataset_for_testing: DatasetDict, correct_models: List[str]):
+    """"""
     dataset_dict = DatasetDict()
     dataset_dict["train"] = dataset_for_testing
     tokenize_dataset(dataset_dict, target_model=correct_models[0])
@@ -84,9 +89,23 @@ def test_save_method_without_path(dataset_for_testing: DatasetDict, correct_mode
         tokenize_dataset(dataset_for_testing, target_model=correct_models[0], save_to_disk=True)
 
 
+def test_save_method_is_false_with_path(caplog, dataset_for_testing: DatasetDict, correct_models: List[str]):
+    """"""
+    with caplog.at_level(logging.WARNING):
+        tokenize_dataset(
+            dataset_for_testing, target_model=correct_models[0], save_to_disk=False, save_path="/home/code"
+        )
+
+
 def test_target_models_metadata(correct_models: List[str]):
     """"""
     for model in correct_models:
         model_keys = list(TARGET_MODELS[model].keys())
         assert model_keys == ["preprocessor", "default_model", "encode_function", "features"]
         assert len(model_keys) == 4
+
+
+def test_without_target_model(dataset_for_testing: DatasetDict):
+    """"""
+    with pytest.raises(ValueError):
+        tokenize_dataset(dataset_for_testing)

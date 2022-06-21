@@ -15,51 +15,15 @@
 # limitations under the License.
 """tokenize.py allows to automatically tokenize any dataset to prepare it for the training of a target model."""
 import logging
-from typing import Optional, Union
+from typing import Any, Dict, Optional, Union
 
-from datasets import Array2D, Array3D, ClassLabel, Dataset, DatasetDict, Features, Sequence, Value
-from transformers import LayoutLMv2Processor, LayoutLMv3Processor, LayoutXLMProcessor
+from datasets import Dataset, DatasetDict
 
-from .encode_functions import encode_layoutlmv2, encode_layoutlmv3, encode_layoutxlm
+from .encoders import LayoutLMv2Encoder, LayoutLMv3Encoder, LayoutXLMEncoder
 
 logger = logging.getLogger(__name__)
 
-TARGET_MODELS = {
-    "layoutlmv2": {
-        "preprocessor": LayoutLMv2Processor,
-        "default_model": "microsoft/layoutlmv2-base-uncased",
-        "encode_function": encode_layoutlmv2(),
-        "features": Features(
-            {
-                'image': Array3D(dtype="int64", shape=(3, 224, 224)),
-                'input_ids': Sequence(feature=Value(dtype='int64')),
-                'attention_mask': Sequence(Value(dtype='int64')),
-                'token_type_ids': Sequence(Value(dtype='int64')),
-                'bbox': Array2D(dtype="int64", shape=(512, 4)),
-            }
-        ),
-    },
-    "layoutlmv3": {
-        "preprocessor": LayoutLMv3Processor,
-        "default_model": "microsoft/layoutlmv3-base-uncased",
-        "encode_function": encode_layoutlmv3(),
-        "features": Features(
-            {
-                'image': Array3D(dtype="int64", shape=(3, 224, 224)),
-                'input_ids': Sequence(feature=Value(dtype='int64')),
-                'attention_mask': Sequence(Value(dtype='int64')),
-                'token_type_ids': Sequence(Value(dtype='int64')),
-                'bbox': Array2D(dtype="int64", shape=(512, 4)),
-            }
-        ),
-    },
-    "layoutxlm": {
-        "preprocessor": LayoutXLMProcessor,
-        "default_model": "microsoft/layoutxlm-base-uncased",
-        "encode_function": encode_layoutxlm(),
-        "features": Features({}),
-    },
-}
+TARGET_MODELS = {"layoutlmv2": LayoutLMv2Encoder, "layoutlmv3": LayoutLMv3Encoder, "layoutxlm": LayoutXLMEncoder}
 
 
 def tokenize_dataset(
@@ -72,7 +36,7 @@ def tokenize_dataset(
     cache_file_name: Optional[str] = None,
     keep_in_memory: Optional[bool] = False,
     num_proc: Optional[int] = None,
-    preprocessor_config: Optional[Union[str, dict]] = None,
+    processor_config: Optional[Dict[str, Any]] = None,
     save_to_disk: Optional[bool] = False,
     save_path: Optional[str] = None,
 ) -> Union[Dataset, DatasetDict]:
@@ -81,11 +45,11 @@ def tokenize_dataset(
         raise ValueError("""You need to specify the target architecture you want to use to tokenize your dataset.""")
     else:
         try:
-            target_model_config = TARGET_MODELS[target_model]  # type: ignore
+            TARGET_MODELS[target_model]
         except KeyError:
             raise KeyError(
                 f"""
-                You specified a `target_model` that is not supported. Available models: {TARGET_MODELS.keys()}
+                You specified a `target_model` that is not supported. Available models: {list(TARGET_MODELS.keys())}
                 If you think that new model should be available, please feel free to open a new issue on the project
                 repository: https://github.com/deeptools-ai/document-tools/issues
             """
@@ -123,17 +87,14 @@ def tokenize_dataset(
     else:
         raise TypeError("")
 
-    features = target_model_config["features"]
-    features["labels"] = ClassLabel(num_classes=len(labels), names=labels)
-
-    encode_fct = target_model_config["encode_function"]
+    encoder = TARGET_MODELS[target_model](config=processor_config, labels=labels)
 
     if dataset_is_dict:
         encoded_dataset = DatasetDict()
         for key in dict_keys:
             encoded_dataset[key] = dataset.map(
-                encode_fct,
-                features=features,
+                encoder,
+                # features=features,
                 remove_columns=[image_column, label_colum],
                 batched=batched,
                 batch_size=batch_size,
@@ -143,8 +104,8 @@ def tokenize_dataset(
             )
     else:
         encoded_dataset = dataset.map(
-            encode_fct,
-            features=features,
+            encoder,
+            # features=features,
             remove_columns=[image_column, label_colum],
             batched=batched,
             batch_size=batch_size,
