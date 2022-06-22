@@ -17,9 +17,10 @@
 import logging
 from typing import Any, Dict, Optional, Union
 
-from datasets import Dataset, DatasetDict
+from datasets import ClassLabel, Dataset, DatasetDict
 
 from .encoders import LayoutLMv2Encoder, LayoutLMv3Encoder, LayoutXLMEncoder
+from .utils import _get_label_list
 
 logger = logging.getLogger(__name__)
 
@@ -30,10 +31,10 @@ def tokenize_dataset(
     dataset: Union[Dataset, DatasetDict],
     target_model: str = None,
     image_column: Optional[str] = "image",
-    label_colum: Optional[str] = "label",
+    label_column: Optional[str] = "label",
     batched: Optional[bool] = True,
     batch_size: Optional[int] = 2,
-    cache_file_name: Optional[str] = None,
+    cache_file_names: Optional[Dict[str, str]] = None,
     keep_in_memory: Optional[bool] = False,
     num_proc: Optional[int] = None,
     processor_config: Optional[Dict[str, Any]] = None,
@@ -77,42 +78,34 @@ def tokenize_dataset(
         """
         )
 
-    if isinstance(dataset, Dataset):
-        dataset_is_dict = False
-        labels = dataset.features[label_colum].names
-    elif isinstance(dataset, DatasetDict):
-        dataset_is_dict = True
-        dict_keys = list(dataset.keys())
-        labels = dataset[dict_keys[0]].features[label_colum].names
+    if isinstance(dataset, DatasetDict):
+        tmp_dataset = dataset
+        dataset_first_key = list(tmp_dataset.keys())[0]
+    elif isinstance(dataset, Dataset):
+        tmp_dataset = DatasetDict()
+        dataset_first_key = "train"
+        tmp_dataset[dataset_first_key] = dataset
     else:
         raise TypeError("")
 
-    encoder = TARGET_MODELS[target_model](config=processor_config, labels=labels)
-
-    if dataset_is_dict:
-        encoded_dataset = DatasetDict()
-        for key in dict_keys:
-            encoded_dataset[key] = dataset.map(
-                encoder,
-                # features=features,
-                remove_columns=[image_column, label_colum],
-                batched=batched,
-                batch_size=batch_size,
-                cache_file_name=cache_file_name,
-                keep_in_memory=keep_in_memory,
-                num_proc=num_proc,
-            )
+    if isinstance(tmp_dataset[dataset_first_key].features[label_column], ClassLabel):
+        labels = tmp_dataset[dataset_first_key].features[label_column].names
     else:
-        encoded_dataset = dataset.map(
-            encoder,
-            # features=features,
-            remove_columns=[image_column, label_colum],
-            batched=batched,
-            batch_size=batch_size,
-            cache_file_name=cache_file_name,
-            keep_in_memory=keep_in_memory,
-            num_proc=num_proc,
-        )
+        labels = _get_label_list(tmp_dataset[dataset_first_key][label_column])
+
+    encoder = TARGET_MODELS[target_model](config=processor_config, labels=labels)
+    features = encoder.features
+
+    encoded_dataset = tmp_dataset.map(
+        encoder,
+        features=features,
+        remove_columns=[image_column, label_column],
+        batched=batched,
+        batch_size=batch_size,
+        cache_file_names=cache_file_names,
+        keep_in_memory=keep_in_memory,
+        num_proc=num_proc,
+    )
 
     if save_to_disk:
         try:

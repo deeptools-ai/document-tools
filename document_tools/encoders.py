@@ -27,8 +27,9 @@ class BaseEncoder:
     """"""
 
     def __init__(self, config: Dict[str, Any], labels: List[Any]):
-        self.config = config
+        self.config = config if config else {"padding": "max_length", "truncation": True}
         self.labels = labels
+        self.features = None
 
     def __call__(self, batch: Dict[str, List]):
         raise NotImplementedError()
@@ -67,16 +68,15 @@ class LayoutLMv3Encoder(BaseEncoder):
     def __init__(self, **kwargs):
         """"""
         super().__init__(**kwargs)
-        self.default_model = self.config.get("default_model", "microsoft/layoutlmv3-base-uncased")
+        self.default_model = self.config.get("default_model", "microsoft/layoutlmv3-base")
         self.processor = LayoutLMv3Processor.from_pretrained(self.default_model, **self.config)
         self.features = Features(
             {
-                "image": Array3D(dtype="int64", shape=(3, 224, 224)),
+                "pixel_values": Array3D(dtype="float32", shape=(3, 224, 224)),
                 "input_ids": Sequence(feature=Value(dtype="int64")),
                 "attention_mask": Sequence(Value(dtype="int64")),
-                "token_type_ids": Sequence(Value(dtype="int64")),
                 "bbox": Array2D(dtype="int64", shape=(512, 4)),
-                "labels": ClassLabel(num_classes=len(self.labels), names=self.labels),
+                "labels": Sequence(feature=Value(dtype='int64')),
             }
         )
 
@@ -94,7 +94,7 @@ class LayoutXLMEncoder(BaseEncoder):
     def __init__(self, **kwargs):
         """"""
         super().__init__(**kwargs)
-        self.default_model = self.config.get("default_model", "microsoft/layoutxlm-base-uncased")
+        self.default_model = self.config.get("default_model", "microsoft/layoutxlm-base")
         self.processor = LayoutXLMProcessor.from_pretrained(self.default_model, **self.config)
         self.features = Features(
             {

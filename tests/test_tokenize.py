@@ -24,6 +24,8 @@ from datasets import DatasetDict, load_dataset
 from document_tools import tokenize_dataset
 from document_tools.tokenize import TARGET_MODELS
 
+logger = logging.getLogger(__name__)
+
 
 @pytest.fixture
 def incorrect_dataset_format():
@@ -72,6 +74,7 @@ def test_target_models(dataset_for_testing: DatasetDict, correct_models: List[st
     """"""
     assert len(correct_models) == 3
     for model in correct_models:
+        logger.debug(model)
         tokenize_dataset(dataset_for_testing, target_model=model)
 
 
@@ -99,10 +102,11 @@ def test_save_method_is_false_with_path(caplog, dataset_for_testing: DatasetDict
 
 def test_target_models_metadata(correct_models: List[str]):
     """"""
-    for model in correct_models:
-        model_keys = list(TARGET_MODELS[model].keys())
-        assert model_keys == ["preprocessor", "default_model", "encode_function", "features"]
-        assert len(model_keys) == 4
+    assert len(correct_models) == 3
+    assert correct_models == ["layoutlmv2", "layoutlmv3", "layoutxlm"]
+    assert TARGET_MODELS["layoutlmv2"].__name__ == "LayoutLMv2Encoder"
+    assert TARGET_MODELS["layoutlmv3"].__name__ == "LayoutLMv3Encoder"
+    assert TARGET_MODELS["layoutxlm"].__name__ == "LayoutXLMEncoder"
 
 
 def test_without_target_model(dataset_for_testing: DatasetDict):
