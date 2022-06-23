@@ -107,7 +107,7 @@ def test_without_target_model(dataset_for_testing: DatasetDict):
 def test_target_model_is_a_string(dataset_for_testing: DatasetDict):
     """Test that the function raises an error when the target model is not a string."""
     with pytest.raises(KeyError):
-        tokenize_dataset(dataset_for_testing, target_model=1)
+        tokenize_dataset(dataset_for_testing, target_model=1)  # type: ignore
 
 
 def test_layout_lmv2(dataset_for_testing: DatasetDict):

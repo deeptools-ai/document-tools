@@ -29,16 +29,16 @@ logger = logging.getLogger(__name__)
 def tokenize_dataset(
     dataset: Union[Dataset, DatasetDict],
     target_model: str = None,
-    image_column: Optional[str] = "image",
-    label_column: Optional[str] = "label",
-    batched: Optional[bool] = True,
+    image_column: str = "image",
+    label_column: str = "label",
+    batched: bool = True,
     batch_size: Optional[int] = 2,
-    cache_file_names: Optional[Dict[str, str]] = None,
-    keep_in_memory: Optional[bool] = False,
+    cache_file_names: Optional[Dict[str, Optional[str]]] = None,
+    keep_in_memory: bool = False,
     num_proc: Optional[int] = None,
     processor_config: Optional[Dict[str, Any]] = None,
-    save_to_disk: Optional[bool] = False,
-    save_path: Optional[str] = None,
+    save_to_disk: bool = False,
+    save_path: str = None,
 ) -> DatasetDict:
     """
     Tokenize a dataset using a target model and return a new dataset with the encoded features and labels.
@@ -49,25 +49,25 @@ def tokenize_dataset(
         Dataset to be tokenized.
     target_model : str, optional (default=None)
         Target model to use for tokenization.
-    image_column : str, optional (default="image")
+    image_column : str (default="image")
         Name of the column containing the image.
-    label_column : str, optional (default="label")
+    label_column : str (default="label")
         Name of the column containing the label.
-    batched : bool, optional (default=True)
+    batched : bool (default=True)
         Whether to use batched encoding.
     batch_size : int, optional (default=2)
         Batch size for batched encoding.
-    cache_file_names : Dict[str, str], optional (default=None)
+    cache_file_names : Dict[str, Optional[str]], optional (default=None)
         Dictionary containing the cache file names for each target model.
-    keep_in_memory : bool, optional (default=False)
+    keep_in_memory : bool (default=False)
         Whether to keep the dataset in memory.
     num_proc : int, optional (default=None)
         Number of processes to use for batched encoding.
     processor_config : Dict[str, Any], optional (default=None)
         Configuration for the processor of the target model.
-    save_to_disk : bool, optional (default=False)
+    save_to_disk : bool (default=False)
         Whether to save the dataset to disk or not.
-    save_path : str, optional (default=None)
+    save_path : str (default=None)
         Path to save the dataset to disk if `save_to_disk` is True.
 
     Returns
@@ -153,7 +153,7 @@ def tokenize_dataset(
 
     if save_to_disk:
         try:
-            encoded_dataset.save(save_path)
+            encoded_dataset.save_to_disk(save_path)  # type: ignore
         except Exception as e:
             logger.error(e)
 
