@@ -10,16 +10,30 @@
 
 🔧 Tools to automate your document understanding tasks.
 
+This package contains tools to automate your document understanding tasks by leveraging the power of
+[🤗 Datasets](https://github.com/huggingface/datasets) and [🤗 Transformers](https://github.com/huggingface/transformers).
 
-* Documentation: <https://deeptools-ai.github.io/document-tools>
-* GitHub: <https://github.com/deeptools-ai/document-tools>
-* PyPI: <https://pypi.org/project/document-tools/>
-* Free software: Apache-2.0
+With this package, you can (or will be able to):
+
+- 🚧 **Create** a dataset from a collection of documents.
+- ✅ **Transform** a dataset to a format that is suitable for training a model.
+- 🚧 **Train** a model on a dataset.
+- 🚧 **Evaluate** the performance of a model on a dataset of documents.
+- 🚧 **Export** a model to a format that is suitable for inference.
 
 
 ## Features
 
-* TODO
+This project is under development and is in the alpha stage. It is not ready for production use, and if you find any
+bugs or have any suggestions, please let us know by opening an [issue](https://github.com/deeptools-ai/document-tools/issues)
+or a [pull request](https://github.com/deeptools-ai/document-tools/pulls).
+
+### Featured models
+
+- [ ] [DiT](https://huggingface.co/docs/transformers/model_doc/dit)
+- [x] [LayoutLMv2](https://huggingface.co/docs/transformers/model_doc/layoutlmv2)
+- [x] [LayoutLMv3](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)
+- [ ] [LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
 
 ## Credits
 
