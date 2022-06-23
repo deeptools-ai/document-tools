@@ -14,17 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """tokenize.py allows to automatically tokenize any dataset to prepare it for the training of a target model."""
+import copy
 import logging
 from typing import Any, Dict, Optional, Union
 
 from datasets import ClassLabel, Dataset, DatasetDict
 
-from .encoders import LayoutLMv2Encoder, LayoutLMv3Encoder, LayoutXLMEncoder
+from .encoders import TARGET_MODELS
 from .utils import _get_label_list
 
 logger = logging.getLogger(__name__)
-
-TARGET_MODELS = {"layoutlmv2": LayoutLMv2Encoder, "layoutlmv3": LayoutLMv3Encoder, "layoutxlm": LayoutXLMEncoder}
 
 
 def tokenize_dataset(
@@ -78,6 +77,7 @@ def tokenize_dataset(
         """
         )
 
+    dataset = copy.deepcopy(dataset)
     if isinstance(dataset, DatasetDict):
         tmp_dataset = dataset
         dataset_first_key = list(tmp_dataset.keys())[0]
@@ -88,8 +88,8 @@ def tokenize_dataset(
     else:
         raise TypeError("")
 
-    if isinstance(tmp_dataset[dataset_first_key].features[label_column], ClassLabel):
-        labels = tmp_dataset[dataset_first_key].features[label_column].names
+    if isinstance(tmp_dataset[dataset_first_key].features[label_column].feature, ClassLabel):
+        labels = tmp_dataset[dataset_first_key].features[label_column].feature.names
     else:
         labels = _get_label_list(tmp_dataset[dataset_first_key][label_column])
 

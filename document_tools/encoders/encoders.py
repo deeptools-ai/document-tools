@@ -50,7 +50,7 @@ class LayoutLMv2Encoder(BaseEncoder):
                 "attention_mask": Sequence(Value(dtype="int64")),
                 "token_type_ids": Sequence(Value(dtype="int64")),
                 "bbox": Array2D(dtype="int64", shape=(512, 4)),
-                "labels": ClassLabel(num_classes=len(self.labels), names=self.labels),
+                "labels": Sequence(ClassLabel(num_classes=len(self.labels), names=self.labels)),
             }
         )
 

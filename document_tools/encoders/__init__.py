@@ -13,27 +13,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""utils.py group all utils functions in one file."""
-from typing import List, Set
+"""Export the classes and functions in this module to the package."""
+from .encoders import LayoutLMv2Encoder, LayoutLMv3Encoder, LayoutXLMEncoder
+
+TARGET_MODELS = {"layoutlmv2": LayoutLMv2Encoder, "layoutlmv3": LayoutLMv3Encoder, "layoutxlm": LayoutXLMEncoder}
 
 
-def _get_label_list(labels: List[str]) -> List[str]:
-    """
-    Get the list of all dataset labels.
-
-    Parameters
-    ----------
-    labels : List[str]
-        List of labels.
-
-    Returns
-    -------
-    List[str]
-        List of labels without duplicates and sorted.
-    """
-    unique_labels: Set[str] = set()
-    for label in labels:
-        unique_labels = unique_labels | set(label)
-    label_list = list(unique_labels)
-    label_list.sort()
-    return label_list
+__all__ = [
+    "LayoutLMv2Encoder",
+    "LayoutLMv3Encoder",
+    "LayoutXLMEncoder",
+    "TARGET_MODELS",
+]
