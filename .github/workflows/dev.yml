@@ -14,11 +14,10 @@ on:
 
 jobs:
   test-ubuntu:
+    runs-on: ubuntu-18.04
     strategy:
       matrix:
         python-versions: [3.7, 3.8, 3.9]
-        os: ubuntu-18.04
-    runs-on: ${{ matrix.os }}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -48,11 +47,10 @@ jobs:
           files: coverage.xml
 
   test-macos:
+    runs-on: macos-latest
     strategy:
       matrix:
         python-versions: [3.7, 3.8, 3.9]
-        os: macos-latest
-    runs-on: ${{ matrix.os }}
 
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
