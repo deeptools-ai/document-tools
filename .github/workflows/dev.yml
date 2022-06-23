@@ -38,11 +38,11 @@ jobs:
           pip install poetry tox tox-gh-actions
 
       - name: Install tesseract-ocr on Ubuntu
-        if: ${{ matrix.os }} == ubuntu-18.04
+        if: "${{ matrix.os }} == ubuntu-18.04"
         run: sudo apt-get install -y tesseract-ocr
 
       - name: Install tesseract-ocr on MacOS
-        if: ${{ matrix.os }} == macos-latest
+        if: "${{ matrix.os }} == macos-latest"
         run: brew install tesseract
 
       # - name: Install tesseract-ocr on Windows
