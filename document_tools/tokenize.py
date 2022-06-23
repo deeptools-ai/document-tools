@@ -39,8 +39,52 @@ def tokenize_dataset(
     processor_config: Optional[Dict[str, Any]] = None,
     save_to_disk: Optional[bool] = False,
     save_path: Optional[str] = None,
-) -> Union[Dataset, DatasetDict]:
-    """"""
+) -> DatasetDict:
+    """
+    Tokenize a dataset using a target model and return a new dataset with the encoded features and labels.
+
+    Parameters
+    ----------
+    dataset : Dataset or DatasetDict, required
+        Dataset to be tokenized.
+    target_model : str, optional (default=None)
+        Target model to use for tokenization.
+    image_column : str, optional (default="image")
+        Name of the column containing the image.
+    label_column : str, optional (default="label")
+        Name of the column containing the label.
+    batched : bool, optional (default=True)
+        Whether to use batched encoding.
+    batch_size : int, optional (default=2)
+        Batch size for batched encoding.
+    cache_file_names : Dict[str, str], optional (default=None)
+        Dictionary containing the cache file names for each target model.
+    keep_in_memory : bool, optional (default=False)
+        Whether to keep the dataset in memory.
+    num_proc : int, optional (default=None)
+        Number of processes to use for batched encoding.
+    processor_config : Dict[str, Any], optional (default=None)
+        Configuration for the processor of the target model.
+    save_to_disk : bool, optional (default=False)
+        Whether to save the dataset to disk or not.
+    save_path : str, optional (default=None)
+        Path to save the dataset to disk if `save_to_disk` is True.
+
+    Returns
+    -------
+    DatasetDict
+        Dataset with the encoded features and labels.
+
+    Raises
+    ------
+    ValueError
+        If there is no target model for the dataset. Or if saving to disk is requested but the save path is not
+        provided.
+    KeyError
+        If the target model is not supported.
+    TypeError
+        If the dataset is not a Dataset or DatasetDict.
+    """
     if not target_model:
         raise ValueError("""You need to specify the target architecture you want to use to tokenize your dataset.""")
     else:
@@ -86,7 +130,7 @@ def tokenize_dataset(
         dataset_first_key = "train"
         tmp_dataset[dataset_first_key] = dataset
     else:
-        raise TypeError("")
+        raise TypeError(f"The dataset has to be either a `Dataset` or a `DatasetDict`. You provided: {type(dataset)}")
 
     if isinstance(tmp_dataset[dataset_first_key].features[label_column].feature, ClassLabel):
         labels = tmp_dataset[dataset_first_key].features[label_column].feature.names
