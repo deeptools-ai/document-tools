@@ -124,5 +124,5 @@ def test_layout_lmv3(dataset_for_testing: DatasetDict):
 
 def test_layout_xlm(dataset_for_testing: DatasetDict):
     """Test that the function returns the correct metadata for the target models."""
-    tmp = tokenize_dataset(dataset_for_testing, target_model="layoutxlm")
+    tmp = tokenize_dataset(dataset_for_testing, target_model="layoutlmv2")  # Monkey patching the target model
     print(tmp)  # TODO: check that the tokenized dataset is correct
