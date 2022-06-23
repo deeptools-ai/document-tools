@@ -1,30 +1,25 @@
-# This is a basic workflow to help you get started with Actions
-
 name: dev workflow
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
+  # Triggers the workflow on push or pull request events but only for the main branch
   push:
-    branches: [ master, main ]
+    branches: main
   pull_request:
-    branches: [ master, main ]
+    branches: main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
-  # This workflow contains a single job called "test"
-  test:
-    # The type of runner that the job will run on
+  test-ubuntu:
     strategy:
       matrix:
         python-versions: [3.7, 3.8, 3.9]
-        os: [ubuntu-18.04, macos-latest] # windows-latest
+        os: ubuntu-18.04
     runs-on: ${{ matrix.os }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
@@ -38,20 +33,41 @@ jobs:
           pip install poetry tox tox-gh-actions
 
       - name: Install tesseract-ocr on Ubuntu
-        if: "${{ matrix.os }} == ubuntu-18.04"
+        run: sudo apt-get install -y tesseract-ocr
+
+      - name: test with tox
+        run:
+          tox
+
+      - name: list files
+        run: ls -l .
+
+      - uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          files: coverage.xml
+
+  test-macos:
+    strategy:
+      matrix:
+        python-versions: [3.7, 3.8, 3.9]
+        os: macos-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-versions }}
+
+      - name: Install dependencies
         run: |
-          echo ${{ matrix.os }}
-          sudo apt-get install -y tesseract-ocr
+          python -m pip install --upgrade pip
+          pip install poetry tox tox-gh-actions
 
       - name: Install tesseract-ocr on MacOS
-        if: "${{ matrix.os }} == macos-latest"
-        run: |
-          echo ${{ matrix.os }}
-          brew install tesseract
-
-      # - name: Install tesseract-ocr on Windows
-      #   if: ${{ matrix.os }} == "windows-latest"
-      #   run: |
+        run: brew install tesseract
 
       - name: test with tox
         run:
