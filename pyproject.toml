@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "document-tools"
-version = "0.2.0"
+version = "0.0.1"
 homepage = "https://github.com/deeptools-ai/document-tools"
 description = "🔧 Tools to automate your document understanding tasks."
 authors = ["deeptools.ai <contact@deeptools.ai>"]
