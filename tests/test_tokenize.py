@@ -13,7 +13,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import logging
 from typing import Any, List
 
 import numpy as np
@@ -85,8 +84,21 @@ def test_save_method_without_path(dataset_for_testing: DatasetDict):
 
 def test_save_method_is_false_with_path(caplog, dataset_for_testing: DatasetDict):
     """Test that the function raises an error when the save_to_disk is False and the save_path is provided."""
-    with caplog.at_level(logging.WARNING):
-        tokenize_dataset(dataset_for_testing, target_model="layoutlmv2", save_to_disk=False, save_path="/home/code")
+    tokenize_dataset(dataset_for_testing, target_model="layoutlmv2", save_to_disk=False, save_path="/home/code")
+    assert caplog.records[0].levelname == "WARNING"
+    assert (
+        """
+            You have indicated a path to save the dataset, but have chosen not to save it to disk. You need to add
+            `save_to_disk=True` to the call to `tokenize_dataset` to save the dataset to disk.
+        """
+        in caplog.text
+    )
+
+
+def test_log_if_save_to_disk_is_true(caplog, dataset_for_testing: DatasetDict):
+    """Test that the function logs if the save_to_disk is True."""
+    tokenize_dataset(dataset_for_testing, target_model="layoutlmv2", save_to_disk=True, save_path="/home/code")
+    assert caplog.records[0].levelname == "ERROR"
 
 
 def test_target_models_metadata():
