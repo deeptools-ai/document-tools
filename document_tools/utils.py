@@ -31,9 +31,15 @@ def _get_label_list(labels: List[str]) -> List[str]:
     List[str]
         List of labels without duplicates and sorted.
     """
+    if not isinstance(labels, list):
+        raise TypeError(f"Labels must be a list. Got {type(labels)}.")
+
     unique_labels: Set[str] = set()
+
     for label in labels:
         unique_labels = unique_labels | set(label)
+
     label_list = list(unique_labels)
     label_list.sort()
+
     return label_list
