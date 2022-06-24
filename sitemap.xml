@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://deeptools-ai.github.io/document-tools/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://deeptools-ai.github.io/document-tools/api/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://deeptools-ai.github.io/document-tools/changelog/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://deeptools-ai.github.io/document-tools/contributing/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://deeptools-ai.github.io/document-tools/installation/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://deeptools-ai.github.io/document-tools/usage/</loc>
+         <lastmod>2022-06-24</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+</urlset>
