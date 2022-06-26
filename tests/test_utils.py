@@ -27,7 +27,7 @@ def list_of_labels_with_duplicate_integers():
     """List of labels with duplicate integers."""
     return [
         [1, 2, 3, 4, 5, 2, 3, 3, 2],
-        [2, 6, 2, 2, 4, 4, 3, 3, 5],
+        [2, 5, 2, 2, 4, 4, 3, 3, 5],
         [1, 5, 5, 4, 5, 2, 3, 3, 2],
         [1, 2, 3, 4, 5, 1, 3, 3, 1],
     ]
