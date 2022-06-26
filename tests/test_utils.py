@@ -23,15 +23,14 @@ from document_tools.utils import _get_label_list
 
 
 @pytest.fixture()
-def list_of_labels_with_duplicate_strings():
-    """List of labels with duplicate strings."""
-    return [["bill", "invoice", "payment", "receipt", "bill", "invoice", "bill"]]
-
-
-@pytest.fixture()
 def list_of_labels_with_duplicate_integers():
     """List of labels with duplicate integers."""
-    return [[1, 2, 3, 4, 5, 2, 3, 3, 2]]
+    return [
+        [1, 2, 3, 4, 5, 2, 3, 3, 2],
+        [2, 6, 2, 2, 4, 4, 3, 3, 5],
+        [1, 5, 5, 4, 5, 2, 3, 3, 2],
+        [1, 2, 3, 4, 5, 1, 3, 3, 1],
+    ]
 
 
 @pytest.fixture()
@@ -44,13 +43,7 @@ def list_of_wrong_labels():
     ]
 
 
-def test_get_label_list_with_duplicate(list_of_labels_with_duplicate_strings: List[str]):
-    """Test that the function returns the correct list of labels."""
-    label_list = _get_label_list(list_of_labels_with_duplicate_strings)
-    assert label_list == ["bill", "invoice", "payment", "receipt"]
-
-
-def test_get_label_list_with_duplicate_integers(list_of_labels_with_duplicate_integers: List[int]):
+def test_get_label_list_with_duplicate_integers(list_of_labels_with_duplicate_integers: List[List[int]]):
     """Test that the function returns the correct list of labels."""
     label_list = _get_label_list(list_of_labels_with_duplicate_integers)
     assert label_list == [1, 2, 3, 4, 5]

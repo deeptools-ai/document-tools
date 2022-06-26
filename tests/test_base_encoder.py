@@ -36,4 +36,4 @@ def test_base_encoder(get_labels: List[int]):
 def test_base_encoder_call(get_labels: List[int]):
     encoder = BaseEncoder(labels=get_labels)
     with pytest.raises(NotImplementedError):
-        encoder({"image": np.zeros((1, 1, 1, 1))})
+        encoder({"image": [np.zeros((1, 1, 1, 1))]})
