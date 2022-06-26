@@ -17,23 +17,29 @@
 from typing import List, Set
 
 
-def _get_label_list(labels: List[str]) -> List[str]:
+def _get_label_list(labels: List[List[int]]) -> List[int]:
     """
     Get the list of all dataset labels.
 
     Parameters
     ----------
-    labels : List[str]
-        List of labels.
+    labels : List[List[int]]
+        List of all labels.
 
     Returns
     -------
-    List[str]
+    List[int]
         List of labels without duplicates and sorted.
     """
-    unique_labels: Set[str] = set()
+    if not isinstance(labels, list):
+        raise TypeError(f"Labels must be a list of lists, not {type(labels)}")
+
+    unique_labels: Set[int] = set()
+
     for label in labels:
         unique_labels = unique_labels | set(label)
+
     label_list = list(unique_labels)
     label_list.sort()
+
     return label_list
