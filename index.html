@@ -269,6 +269,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#credits" class="md-nav__link">
     Credits
   </a>
@@ -416,6 +423,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#credits" class="md-nav__link">
     Credits
   </a>
@@ -475,6 +489,18 @@ or a <a href="https://github.com/deeptools-ai/document-tools/pulls">pull request
 <li>[x][LayoutLMv3](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)</li>
 <li>[ ][LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)</li>
 </ul>
+<h3 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h3>
+<p>One-liner to get started:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">document_tools</span> <span class="kn">import</span> <span class="n">tokenize_dataset</span>
+
+<span class="c1"># Load a dataset from 🤗 Hub</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;deeptools-ai/test-document-invoice&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+
+<span class="c1"># Tokenize the dataset</span>
+<span class="n">tokenized_dataset</span> <span class="o">=</span> <span class="n">tokenize_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">target_model</span><span class="o">=</span><span class="s2">&quot;layoutlmv3&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>For more information, please see the <a href="https://deeptools-ai.github.io/document-tools/">documentation</a></p>
 <h3 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">&para;</a></h3>
 <p>This package was created with <a href="https://github.com/audreyr/cookiecutter">Cookiecutter</a> and the <a href="https://github.com/waynerv/cookiecutter-pypackage">waynerv/cookiecutter-pypackage</a> project template.</p>
 <!-- END INCLUDE -->
