@@ -35,6 +35,23 @@ or a [pull request](https://github.com/deeptools-ai/document-tools/pulls).
 - [x] [LayoutLMv3](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)
 - [ ] [LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
 
+## Usage
+
+One-liner to get started:
+
+```python
+from datasets import load_dataset
+from document_tools import tokenize_dataset
+
+# Load a dataset from 🤗 Hub
+dataset = load_dataset("deeptools-ai/test-document-invoice", split="train")
+
+# Tokenize the dataset
+tokenized_dataset = tokenize_dataset(dataset, target_model="layoutlmv3")
+```
+
+For more information, please see the [documentation](https://deeptools-ai.github.io/document-tools/)
+
 ## Credits
 
 This package was created with [Cookiecutter](https://github.com/audreyr/cookiecutter) and the [waynerv/cookiecutter-pypackage](https://github.com/waynerv/cookiecutter-pypackage) project template.

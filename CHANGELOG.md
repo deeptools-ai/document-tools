@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2022-06-26
+
+### Added
+
+* Added tests for the `_get_label_list` function to assert that it returns a list of labels and the inputs are valid.
+* Improve tests for `tokenize_dataset`.
+* Added quick usage guide to the README.
 
 ## [0.1.0] - 2022-06-24
 
