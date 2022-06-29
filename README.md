@@ -33,7 +33,7 @@ or a [pull request](https://github.com/deeptools-ai/document-tools/pulls).
 - [ ] [DiT](https://huggingface.co/docs/transformers/model_doc/dit)
 - [x] [LayoutLMv2](https://huggingface.co/docs/transformers/model_doc/layoutlmv2)
 - [x] [LayoutLMv3](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)
-- [ ] [LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
+- [x] [LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
 
 ## Usage
 
