@@ -137,15 +137,16 @@ class LayoutXLMEncoder(BaseEncoder):
         """
         super().__init__(**kwargs)
         self.default_model = self.config.get("default_model", "microsoft/layoutxlm-base")
+        self.config["return_token_type_ids"] = True
         self.processor = LayoutXLMProcessor.from_pretrained(self.default_model, **self.config)
         self.features = Features(
             {
                 "image": Array3D(dtype="int64", shape=(3, 224, 224)),
                 "input_ids": Sequence(feature=Value(dtype="int64")),
                 "attention_mask": Sequence(Value(dtype="int64")),
-                "token_type_ids": Sequence(Value(dtype="int64")),
+                # "token_type_ids": Sequence(Value(dtype="int64")),
                 "bbox": Array2D(dtype="int64", shape=(512, 4)),
-                "labels": ClassLabel(num_classes=len(self.labels), names=self.labels),
+                "labels": Sequence(ClassLabel(num_classes=len(self.labels), names=self.labels)),
             }
         )
 

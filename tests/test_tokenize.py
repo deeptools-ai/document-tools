@@ -125,16 +125,68 @@ def test_target_model_is_a_string(dataset_for_testing: DatasetDict):
 def test_layout_lmv2(dataset_for_testing: DatasetDict):
     """Test that the function returns the correct metadata for the target models."""
     tmp = tokenize_dataset(dataset_for_testing, target_model="layoutlmv2")
-    print(tmp)  # TODO: check that the tokenized dataset is correct
+    assert tmp is not None
+    tmp_train = tmp["train"]
+    assert len(tmp_train) == 2
+
+    assert type(tmp_train["input_ids"]) is list
+    assert len(tmp_train["input_ids"][0]) == 140
+    assert len(tmp_train["input_ids"][1]) == 269
+
+    assert type(tmp_train["attention_mask"]) is list
+    assert len(tmp_train["attention_mask"][0]) == 140
+    assert len(tmp_train["attention_mask"][1]) == 269
+
+    assert type(tmp_train["token_type_ids"]) is list
+    assert len(tmp_train["token_type_ids"][0]) == 140
+    assert len(tmp_train["token_type_ids"][1]) == 269
+
+    assert type(tmp_train["labels"]) is list
+    assert tmp_train["labels"][0] == [6]
+    assert len(tmp_train["labels"][0]) == 1
+    assert tmp_train["labels"][1] == [6]
+    assert len(tmp_train["labels"][1]) == 1
 
 
 def test_layout_lmv3(dataset_for_testing: DatasetDict):
     """Test that the function returns the correct metadata for the target models."""
     tmp = tokenize_dataset(dataset_for_testing, target_model="layoutlmv3")
-    print(tmp)  # TODO: check that the tokenized dataset is correct
+    assert tmp is not None
+    tmp_train = tmp["train"]
+    assert len(tmp_train) == 2
+
+    assert type(tmp_train["input_ids"]) is list
+    assert len(tmp_train["input_ids"][0]) == 152
+    assert len(tmp_train["input_ids"][1]) == 274
+
+    assert type(tmp_train["attention_mask"]) is list
+    assert len(tmp_train["attention_mask"][0]) == 152
+    assert len(tmp_train["attention_mask"][1]) == 274
+
+    assert type(tmp_train["labels"]) is list
+    assert tmp_train["labels"][0] == [6]
+    assert len(tmp_train["labels"][0]) == 1
+    assert tmp_train["labels"][1] == [6]
+    assert len(tmp_train["labels"][1]) == 1
 
 
 def test_layout_xlm(dataset_for_testing: DatasetDict):
     """Test that the function returns the correct metadata for the target models."""
-    tmp = tokenize_dataset(dataset_for_testing, target_model="layoutlmv2")  # Monkey patching the target model
-    print(tmp)  # TODO: check that the tokenized dataset is correct
+    tmp = tokenize_dataset(dataset_for_testing, target_model="layoutxlm")
+    assert tmp is not None
+    tmp_train = tmp["train"]
+    assert len(tmp_train) == 2
+
+    assert type(tmp_train["input_ids"]) is list
+    assert len(tmp_train["input_ids"][0]) == 155
+    assert len(tmp_train["input_ids"][1]) == 228
+
+    assert type(tmp_train["attention_mask"]) is list
+    assert len(tmp_train["attention_mask"][0]) == 155
+    assert len(tmp_train["attention_mask"][1]) == 228
+
+    assert type(tmp_train["labels"]) is list
+    assert tmp_train["labels"][0] == [6]
+    assert len(tmp_train["labels"][0]) == 1
+    assert tmp_train["labels"][1] == [6]
+    assert len(tmp_train["labels"][1]) == 1
