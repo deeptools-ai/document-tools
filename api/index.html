@@ -1187,7 +1187,8 @@ https://huggingface.co/docs/transformers/model_doc/layoutlmv3#transformers.Layou
 <span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
-<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">LayoutXLMEncoder</span><span class="p">(</span><span class="n">BaseEncoder</span><span class="p">):</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">LayoutXLMEncoder</span><span class="p">(</span><span class="n">BaseEncoder</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;LayoutXLMEncoder is the encoder for datasets using LayoutXLM.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1202,15 +1203,16 @@ https://huggingface.co/docs/transformers/model_doc/layoutlmv3#transformers.Layou
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">default_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;default_model&quot;</span><span class="p">,</span> <span class="s2">&quot;microsoft/layoutxlm-base&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;return_token_type_ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">processor</span> <span class="o">=</span> <span class="n">LayoutXLMProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_model</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">Features</span><span class="p">(</span>
             <span class="p">{</span>
                 <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">Array3D</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)),</span>
                 <span class="s2">&quot;input_ids&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">feature</span><span class="o">=</span><span class="n">Value</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)),</span>
                 <span class="s2">&quot;attention_mask&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">Value</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)),</span>
-                <span class="s2">&quot;token_type_ids&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">Value</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)),</span>
+                <span class="c1"># &quot;token_type_ids&quot;: Sequence(Value(dtype=&quot;int64&quot;)),</span>
                 <span class="s2">&quot;bbox&quot;</span><span class="p">:</span> <span class="n">Array2D</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
-                <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">ClassLabel</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span>
+                <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">ClassLabel</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)),</span>
             <span class="p">}</span>
         <span class="p">)</span>
 
@@ -1251,12 +1253,12 @@ https://huggingface.co/docs/transformers/model_doc/layoutlmv3#transformers.Layou
 
       <details class="quote">
         <summary>Source code in <code>document_tools/encoders/encoders.py</code></summary>
-        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">152</span>
-<span class="normal">153</span>
+        <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">153</span>
 <span class="normal">154</span>
 <span class="normal">155</span>
 <span class="normal">156</span>
-<span class="normal">157</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]):</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">]):</span>
     <span class="sd">&quot;&quot;&quot;Call the LayoutXLMEncoder.&quot;&quot;&quot;</span>
     <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s2">&quot;RGB&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">[</span><span class="s2">&quot;image&quot;</span><span class="p">]]</span>
     <span class="n">encoded_inputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processor</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
@@ -1312,7 +1314,8 @@ https://huggingface.co/docs/transformers/model_doc/layoutxlm#transformers.Layout
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
-<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the LayoutXLMEncoder.</span>
 
@@ -1324,15 +1327,16 @@ https://huggingface.co/docs/transformers/model_doc/layoutxlm#transformers.Layout
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">default_model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;default_model&quot;</span><span class="p">,</span> <span class="s2">&quot;microsoft/layoutxlm-base&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;return_token_type_ids&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">processor</span> <span class="o">=</span> <span class="n">LayoutXLMProcessor</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_model</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">Features</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="n">Array3D</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">224</span><span class="p">,</span> <span class="mi">224</span><span class="p">)),</span>
             <span class="s2">&quot;input_ids&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">feature</span><span class="o">=</span><span class="n">Value</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)),</span>
             <span class="s2">&quot;attention_mask&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">Value</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)),</span>
-            <span class="s2">&quot;token_type_ids&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">Value</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">)),</span>
+            <span class="c1"># &quot;token_type_ids&quot;: Sequence(Value(dtype=&quot;int64&quot;)),</span>
             <span class="s2">&quot;bbox&quot;</span><span class="p">:</span> <span class="n">Array2D</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int64&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">4</span><span class="p">)),</span>
-            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">ClassLabel</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span>
+            <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">(</span><span class="n">ClassLabel</span><span class="p">(</span><span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">),</span> <span class="n">names</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">labels</span><span class="p">)),</span>
         <span class="p">}</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
