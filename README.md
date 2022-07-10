@@ -30,10 +30,10 @@ or a [pull request](https://github.com/deeptools-ai/document-tools/pulls).
 
 ### Featured models
 
-- [ ] [DiT](https://huggingface.co/docs/transformers/model_doc/dit)
-- [x] [LayoutLMv2](https://huggingface.co/docs/transformers/model_doc/layoutlmv2)
-- [x] [LayoutLMv3](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)
-- [x] [LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
+- ❌ [DiT](https://huggingface.co/docs/transformers/model_doc/dit)
+- ✅ [LayoutLMv2](https://huggingface.co/docs/transformers/model_doc/layoutlmv2)
+- ✅ [LayoutLMv3](https://huggingface.co/docs/transformers/model_doc/layoutlmv3)
+- ✅ [LayoutXLM](https://huggingface.co/docs/transformers/model_doc/layoutxlm)
 
 ## Usage
 
