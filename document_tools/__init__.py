@@ -2,7 +2,7 @@
 
 __author__ = """deeptools.ai"""
 __email__ = "contact@deeptools.ai"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 
 from .encoders import TARGET_MODELS, LayoutLMv2Encoder, LayoutLMv3Encoder, LayoutXLMEncoder
